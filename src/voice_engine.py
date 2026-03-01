@@ -35,6 +35,8 @@ class VoiceEngine:
         self.piper_config = os.getenv("GAMERCAT_TTS_PIPER_CONFIG", "").strip()
         self.piper_length_scale = os.getenv("GAMERCAT_TTS_PIPER_LENGTH_SCALE", "0.95")
         self._engine = None
+        self._edge_enabled = edge_tts is not None
+        self._edge_warned = False
 
         self.tts_queue = queue.Queue()
         self.tts_thread = threading.Thread(target=self._tts_worker, daemon=True)
@@ -72,7 +74,7 @@ class VoiceEngine:
         await communicate.save(out_path)
 
     def _speak_edge(self, text):
-        if edge_tts is None:
+        if not self._edge_enabled or edge_tts is None:
             raise RuntimeError("edge-tts is not installed.")
 
         with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp:
@@ -145,8 +147,11 @@ class VoiceEngine:
             return
 
         if preferred == "edge":
-            self._speak_edge(text)
-            return
+            try:
+                self._speak_edge(text)
+                return
+            except Exception as e:
+                raise RuntimeError(f"edge backend failed: {e}") from e
 
         if preferred == "powershell":
             self._speak_powershell(text)
@@ -169,11 +174,15 @@ class VoiceEngine:
             except Exception as e:
                 print(f"[TTS Warning] piper unavailable/failed: {e}. Trying edge-tts.")
 
-        try:
-            self._speak_edge(text)
-            return
-        except Exception as e:
-            print(f"[TTS Warning] edge-tts unavailable/failed: {e}. Trying Windows SAPI.")
+        if self._edge_enabled:
+            try:
+                self._speak_edge(text)
+                return
+            except Exception as e:
+                self._edge_enabled = False
+                if not self._edge_warned:
+                    print(f"[TTS Warning] edge-tts unavailable/failed: {e}. Trying Windows SAPI.")
+                    self._edge_warned = True
 
         if sys.platform == "win32":
             try:
