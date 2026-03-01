@@ -33,13 +33,13 @@ Gamer-Cat is a local-first, offline AI companion that actually **sees** what you
    ollama pull moondream
    ollama pull llama3
    ```
-2. **Python 3.10+** (3.13 tested).
+2. **uv + Python 3.13.5** (pinned via `.python-version`).
 3. **FFmpeg:** Required for audio processing.
 4. **Dependencies:**
    ```bash
-   pip install -r requirements.txt
+   uv sync
    ```
-   *Note: On Windows, ensure you have C++ Build Tools installed for PyAudio.*
+   *Note: `uv.lock` pins all dependency versions for reproducible installs.*
 
 ---
 
@@ -48,7 +48,7 @@ Gamer-Cat is a local-first, offline AI companion that actually **sees** what you
 1.  **Start Ollama:** `ollama serve` (if not already running).
 2.  **Launch Gamer-Cat:**
     ```bash
-    python src/gamer_cat.py
+    uv run python src/gamer_cat.py
     ```
 
 ---

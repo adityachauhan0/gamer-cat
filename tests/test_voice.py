@@ -3,7 +3,7 @@ import time
 
 def test_voice_loop():
     print("--- Voice Engine Test ---")
-    engine = VoiceEngine(stt_model="tiny") # Using 'tiny' for speed during testing
+    engine = VoiceEngine(stt_model="tiny", background_listen=False) # Using 'tiny' for speed during testing
     
     # Test Speak
     test_phrase = "Testing voice output. Can you hear me?"
@@ -25,6 +25,7 @@ def test_voice_loop():
     else:
         print("FAILURE: Transcription did not match.")
         engine.speak(f"I heard {transcription}, but I was expecting hello.")
+    engine.close()
 
 if __name__ == "__main__":
     test_voice_loop()

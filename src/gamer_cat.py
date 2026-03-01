@@ -1,7 +1,7 @@
 import time
 import requests
 from voice_engine import VoiceEngine
-from mcp_server import current_context
+from mcp_server import current_context, context_lock
 from collections import deque
 import random
 
@@ -18,7 +18,8 @@ def get_ai_response(user_input, history, proactive=False):
     system_prompt = (
         "You are 'GamerCat', a supportive, witty, and observant AI gaming buddy. "
         "You speak in short, punchy sentences. Maximum 2 sentences per response. "
-        "Use the provided screen history to make relevant comments. "
+        "Use the provided screen history to make relevant comments grounded in specific visible details. "
+        "If the context includes concrete game state (like chess piece squares, move list, clocks, inventory counts, or scores), reference those details. "
         "You are offline, local, and slightly snarky but always a good friend."
     )
     
@@ -49,7 +50,7 @@ def get_ai_response(user_input, history, proactive=False):
 
 def main():
     print("--- GamerCat: The Buddy is Online ---")
-    voice = VoiceEngine()
+    voice = VoiceEngine(background_listen=True, listen_duration=4)
     voice.speak("Gamer Cat is in the house! What's the plan for today?")
     
     last_processed_desc = ""
@@ -58,7 +59,8 @@ def main():
     while True:
         try:
             # Update history if screen context changed
-            current_desc = current_context["description"]
+            with context_lock:
+                current_desc = current_context["description"]
             context_changed = False
             if current_desc != last_processed_desc and current_desc != "Nothing yet...":
                 screen_history.append(current_desc)
@@ -66,8 +68,8 @@ def main():
                 print(f"[History Updated] {current_desc}")
                 context_changed = True
 
-            # Listen for user input
-            user_text = voice.listen(duration=4)
+            # Poll transcript from the background listener
+            user_text = voice.poll_transcript()
             
             if user_text and len(user_text.strip()) > 1:
                 print(f"User (Recognized): {user_text}")
@@ -87,6 +89,7 @@ def main():
             
         except KeyboardInterrupt:
             print("\nGamerCat is taking a nap. Catch ya later!")
+            voice.close()
             break
         except Exception as e:
             print(f"Main Loop Error: {e}")

@@ -5,6 +5,7 @@ import threading
 import time
 
 mcp = FastMCP("GamerCat")
+context_lock = threading.Lock()
 
 # Shared state for screen context
 current_context = {
@@ -18,8 +19,9 @@ def auto_capture_loop():
         try:
             b64 = capture_screen()
             desc = describe_image(b64)
-            current_context["description"] = desc
-            current_context["timestamp"] = time.time()
+            with context_lock:
+                current_context["description"] = desc
+                current_context["timestamp"] = time.time()
             print(f"[AutoCapture] Screen context updated: {desc}")
         except Exception as e:
             print(f"[AutoCapture] Error: {e}")
@@ -27,8 +29,11 @@ def auto_capture_loop():
 
 @mcp.tool()
 def get_screen_context() -> str:
-    """Returns the most recent 30-word description of the screen context."""
-    return f"Last screen context ({int(time.time() - current_context['timestamp'])}s ago): {current_context['description']}"
+    """Returns the most recent detailed screen description."""
+    with context_lock:
+        age = int(time.time() - current_context["timestamp"])
+        desc = current_context["description"]
+    return f"Last screen context ({age}s ago): {desc}"
 
 if __name__ == "__main__":
     # Start background capture

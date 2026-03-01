@@ -11,7 +11,7 @@ def capture_screen():
     # screenshot.thumbnail((800, 600))
     
     buffered = io.BytesIO()
-    screenshot.save(buffered, format="JPEG", quality=70)
+    screenshot.save(buffered, format="JPEG", quality=80)
     return base64.b64encode(buffered.getvalue()).decode('utf-8')
 
 if __name__ == "__main__":

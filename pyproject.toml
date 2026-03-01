@@ -1,0 +1,19 @@
+[project]
+name = "gamer-cat"
+version = "0.1.0"
+description = "Local-first AI gaming companion with vision, voice, and MCP."
+requires-python = "==3.13.*"
+dependencies = [
+    "edge-tts",
+    "faster-whisper",
+    "mcp",
+    "numpy",
+    "pillow",
+    "pyaudio",
+    "pyttsx3",
+    "pyyaml",
+    "requests",
+]
+
+[tool.uv]
+package = false
