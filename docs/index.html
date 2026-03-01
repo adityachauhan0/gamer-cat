@@ -10,18 +10,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="ambient" aria-hidden="true">
+    <canvas id="fx-canvas" aria-hidden="true"></canvas>
+    <div class="ambient" aria-hidden="true" id="ambient">
         <div class="vignette"></div>
-        <pre class="code code-a">const status = "offline"; // llama3 loaded
+        <pre class="code code-a" data-depth="0.08">const status = "offline"; // llama3 loaded
 vision.scan(screen);
 if (threatLevel > 0.7) callout("rotate fast");
 mood = "catgirl_hype";</pre>
-        <pre class="code code-b">class GamerCat:
+        <pre class="code code-b" data-depth="0.12">class GamerCat:
     def __init__(self):
         self.brain = "llama3"
         self.eyes = "moondream"
         self.mode = "local-only"</pre>
-        <pre class="code code-c">from voice_engine import VoiceEngine
+        <pre class="code code-c" data-depth="0.18">from voice_engine import VoiceEngine
 voice = VoiceEngine(tts_backend="edge")
 voice.speak("lets clutch this round")</pre>
     </div>
@@ -36,29 +37,29 @@ voice.speak("lets clutch this round")</pre>
     </div>
 
     <main class="stage">
-        <article class="hero">
-            <div class="halo left">
-                <img src="catgirl.svg" alt="">
-            </div>
+        <article class="hero reveal" id="hero-card">
+            <figure class="avatar-full">
+                <img src="assets/full_body_anime_girl.png" alt="">
+            </figure>
             <div class="halo right">
-                <img src="catgirl.svg" alt="Gamer-Cat anime avatar">
+                <img src="assets/face_torso_anime_girl.png" alt="Gamer-Cat anime avatar">
             </div>
 
             <p class="badge">OFFLINE COMPANION</p>
 
             <header class="headline">
-                <img src="catgirl.svg" alt="" class="mini">
+                <img src="assets/face_torso_anime_girl.png" alt="" class="mini">
                 <h1>GAMER-CAT</h1>
             </header>
 
-            <p class="copy">
+            <p class="copy reveal delay-1">
                 The first local-first AI buddy that <strong>sees</strong> your screen and
                 <strong>talks back</strong>. Built to run beside your favorite games.
             </p>
 
-            <a class="cta" href="https://github.com/adityachauhan0/gamer-cat">VIEW SOURCE CODE</a>
+            <a class="cta reveal delay-2" href="https://github.com/adityachauhan0/gamer-cat">VIEW SOURCE CODE</a>
 
-            <footer class="specs">
+            <footer class="specs reveal delay-3">
                 <span>SYSTEM REQS: 16GB RAM</span>
                 <span>LLAMA-3</span>
                 <span>MOONDREAM-2</span>
@@ -67,5 +68,6 @@ voice.speak("lets clutch this round")</pre>
     </main>
 
     <div class="corner-star" aria-hidden="true">*</div>
+    <script src="app.js"></script>
 </body>
 </html>
