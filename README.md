@@ -1,7 +1,7 @@
 # GAMER-CAT
 
 <p align="center">
-  <img src="readme_banner.png" alt="Gamer-Cat Banner" width="100%" />
+  <img src="assets/banners/readme_banner.png" alt="Gamer-Cat Banner" width="100%" />
 </p>
 
 <p align="center">
@@ -71,6 +71,7 @@ uv run python src/gamer_cat.py
 ## Links
 - Live site: https://adityachauhan0.github.io/gamer-cat/
 - Technical docs: [DOCUMENTATION.md](DOCUMENTATION.md)
+- Project notes/archive: [`notes/`](notes)
 - Source: https://github.com/adityachauhan0/gamer-cat
 
 ---
