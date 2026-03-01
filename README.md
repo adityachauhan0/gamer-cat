@@ -1,7 +1,7 @@
 # GAMER-CAT
 
 <p align="center">
-  <img src="docs/assets/face_torso_anime_girl.png" alt="Gamer-Cat Avatar" width="300" />
+  <img src="readme_banner.png" alt="Gamer-Cat Banner" width="100%" />
 </p>
 
 <p align="center">
