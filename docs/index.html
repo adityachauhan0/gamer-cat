@@ -3,78 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gamer-Cat | Your Local-First AI Buddy</title>
+    <title>Gamer-Cat | Offline AI Companion</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Orbitron:wght@700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Animated Code Background -->
-    <div class="code-background">
-        <pre class="code-layer layer-1">
-import torch;
-def gamer_cat_init():
-    screen = see_screen()
-    status = new_cat()
-        </pre>
-        <pre class="code-layer layer-2">
-class GamerCat(AI):
+    <div class="ambient" aria-hidden="true">
+        <div class="vignette"></div>
+        <pre class="code code-a">const status = "offline"; // llama3 loaded
+vision.scan(screen);
+if (threatLevel > 0.7) callout("rotate fast");
+mood = "catgirl_hype";</pre>
+        <pre class="code code-b">class GamerCat:
     def __init__(self):
-        self.vision = moondream
-        self.brain = llama3
-        </pre>
-        <div class="neon-icons">
-            <div class="icon-controller">🎮</div>
-            <div class="icon-heart">💖</div>
-            <div class="icon-star">✨</div>
-            <div class="icon-code">💻</div>
-        </div>
+        self.brain = "llama3"
+        self.eyes = "moondream"
+        self.mode = "local-only"</pre>
+        <pre class="code code-c">from voice_engine import VoiceEngine
+voice = VoiceEngine(tts_backend="edge")
+voice.speak("lets clutch this round")</pre>
     </div>
 
-    <main class="container">
-        <div class="glass-card">
-            <!-- Badges -->
-            <div class="badge-container">
-                <span class="badge">OFFLINE COMPANION</span>
+    <div class="floaters" aria-hidden="true">
+        <span class="floater gamepad g1"></span>
+        <span class="floater gamepad g2"></span>
+        <span class="floater heart h1"></span>
+        <span class="floater heart h2"></span>
+        <span class="floater sparkle s1"></span>
+        <span class="floater sparkle s2"></span>
+    </div>
+
+    <main class="stage">
+        <article class="hero">
+            <div class="halo left">
+                <img src="catgirl.svg" alt="">
+            </div>
+            <div class="halo right">
+                <img src="catgirl.svg" alt="Gamer-Cat anime avatar">
             </div>
 
-            <!-- Title & Avatar -->
-            <div class="hero-header">
-                <div class="mini-avatar">
-                   <img src="catgirl.svg" alt="Gamer-Cat Logo">
-                </div>
-                <h1 class="title">GAMER-CAT</h1>
-            </div>
+            <p class="badge">OFFLINE COMPANION</p>
 
-            <!-- Description -->
-            <p class="description">
-                The first local-first AI buddy that <span class="highlight-cyan">sees</span> your screen and <span class="highlight-purple">talks back</span>. 
-                Built to run alongside your favorite games.
+            <header class="headline">
+                <img src="catgirl.svg" alt="" class="mini">
+                <h1>GAMER-CAT</h1>
+            </header>
+
+            <p class="copy">
+                The first local-first AI buddy that <strong>sees</strong> your screen and
+                <strong>talks back</strong>. Built to run beside your favorite games.
             </p>
 
-            <!-- CTA -->
-            <div class="cta-container">
-                <a href="https://github.com/eden/gamer-cat" class="btn btn-green">VIEW SOURCE CODE</a>
-            </div>
+            <a class="cta" href="https://github.com/adityachauhan0/gamer-cat">VIEW SOURCE CODE</a>
 
-            <!-- Side Avatars (Ref Style) -->
-            <div class="avatar-float avatar-left">
-                <img src="catgirl.svg" alt="Gamer-Cat Side">
-            </div>
-            <div class="avatar-float avatar-right">
-                <img src="catgirl.svg" alt="Gamer-Cat Main">
-            </div>
-
-            <!-- System Reqs -->
-            <div class="footer">
-                <span class="req-item">SYSTEM REQS: 16GB RAM</span>
-                <span class="req-item divider">|</span>
-                <span class="req-item">LLAMA-3</span>
-                <span class="req-item divider">|</span>
-                <span class="req-item">MOONDREAM-2</span>
-            </div>
-        </div>
+            <footer class="specs">
+                <span>SYSTEM REQS: 16GB RAM</span>
+                <span>LLAMA-3</span>
+                <span>MOONDREAM-2</span>
+            </footer>
+        </article>
     </main>
+
+    <div class="corner-star" aria-hidden="true">*</div>
 </body>
 </html>
