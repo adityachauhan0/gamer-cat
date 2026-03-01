@@ -1,0 +1,7 @@
+mcp
+Pillow
+requests
+faster-whisper
+PyAudio
+pyttsx3
+pyyaml

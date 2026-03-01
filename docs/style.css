@@ -1,0 +1,210 @@
+:root {
+    --bg-color: #050810;
+    --card-bg: rgba(13, 17, 23, 0.7);
+    --cyan: #00f2ff;
+    --purple: #b222f2;
+    --green: #22c55e;
+    --text-main: #f0f6fc;
+    --text-dim: #8b949e;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Background Effects */
+.code-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    opacity: 0.2;
+    pointer-events: none;
+}
+
+.code-layer {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--cyan);
+    position: absolute;
+    white-space: pre;
+    animation: drift 60s linear infinite;
+}
+
+.layer-1 { top: 10%; left: 5%; color: var(--purple); }
+.layer-2 { top: 40%; right: 5%; color: var(--cyan); }
+
+@keyframes drift {
+    from { transform: translateY(0); }
+    to { transform: translateY(-100%); }
+}
+
+.neon-icons {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.neon-icons div {
+    position: absolute;
+    font-size: 24px;
+    text-shadow: 0 0 10px currentColor;
+    opacity: 0.4;
+    animation: float 10s ease-in-out infinite;
+}
+
+.icon-controller { top: 15%; right: 15%; color: var(--cyan); }
+.icon-heart { top: 25%; left: 10%; color: #ff007f; }
+.icon-star { bottom: 20%; right: 10%; color: var(--purple); }
+.icon-code { bottom: 15%; left: 15%; color: var(--green); }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(10deg); }
+}
+
+/* Glass Card */
+.glass-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 60px 40px;
+    width: 90%;
+    max-width: 800px;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(0, 242, 255, 0.1);
+    position: relative;
+    overflow: visible;
+}
+
+.badge {
+    background-color: var(--green);
+    color: #000;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+}
+
+.hero-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.mini-avatar img {
+    width: 40px;
+    height: 40px;
+}
+
+.title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 2px;
+    color: var(--text-main);
+    text-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
+}
+
+.description {
+    font-size: 1.2rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+    max-width: 500px;
+    margin: 0 auto 40px;
+}
+
+.highlight-cyan { color: var(--cyan); font-weight: bold; }
+.highlight-purple { color: var(--purple); font-weight: bold; }
+
+.btn-green {
+    background-color: var(--green);
+    color: #000;
+    text-decoration: none;
+    padding: 15px 40px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    display: inline-block;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+}
+
+.btn-green:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(34, 197, 94, 0.5);
+}
+
+/* Floating Avatars */
+.avatar-float {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 250px;
+    height: 250px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.avatar-left {
+    left: -150px;
+    opacity: 0.4;
+    filter: blur(2px) grayscale(0.5);
+}
+
+.avatar-right {
+    right: -150px;
+    box-shadow: 0 0 40px rgba(0, 242, 255, 0.4);
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid var(--cyan);
+}
+
+.avatar-float img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Footer */
+.footer {
+    margin-top: 50px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+}
+
+.divider {
+    margin: 0 10px;
+    opacity: 0.3;
+}
+
+/* Mobile Responsive */
+@media (max-width: 1100px) {
+    .avatar-float {
+        display: none;
+    }
+}

@@ -1,0 +1,23 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="200" cy="200" r="180" fill="#1A1B26" stroke="#00F2FF" stroke-width="8"/>
+<!-- Hair Back -->
+<path d="M100 200C100 100 300 100 300 200V300H100V200Z" fill="#B222F2"/>
+<!-- Face -->
+<path d="M130 180C130 140 270 140 270 180V250C270 290 130 290 130 250V180Z" fill="#FFE0BD"/>
+<!-- Ears -->
+<path d="M130 150L100 80L170 130" fill="#B222F2" stroke="#00F2FF" stroke-width="4"/>
+<path d="M270 150L300 80L230 130" fill="#B222F2" stroke="#00F2FF" stroke-width="4"/>
+<!-- Eyes -->
+<circle cx="170" cy="200" r="15" fill="#00F2FF">
+    <animate attributeName="r" values="15;10;15" dur="3s" repeatCount="indefinite" />
+</circle>
+<circle cx="230" cy="200" r="15" fill="#00F2FF">
+    <animate attributeName="r" values="15;10;15" dur="3s" repeatCount="indefinite" />
+</circle>
+<!-- Headset -->
+<rect x="120" y="180" width="20" height="60" rx="5" fill="#2D2D2D" stroke="#00F2FF"/>
+<rect x="260" y="180" width="20" height="60" rx="5" fill="#2D2D2D" stroke="#00F2FF"/>
+<path d="M140 180C140 140 260 140 260 180" stroke="#2D2D2D" stroke-width="10"/>
+<!-- Mic -->
+<path d="M260 230L220 250" stroke="#00F2FF" stroke-width="4"/>
+</svg>
