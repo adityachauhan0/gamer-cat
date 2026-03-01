@@ -1,6 +1,6 @@
 # GAMER-CAT
 
-![Gamer-Cat Avatar](docs/assets/face_torso_anime_girl.png)
+<img src="docs/assets/face_torso_anime_girl.png" alt="Gamer-Cat Avatar" width="360" />
 
 > Your local anime gaming companion that sees your screen, talks back, and hypes you up in real time.
 
