@@ -1,66 +1,68 @@
-# 😼 GAMER-CAT 🎮
+# GAMER-CAT
 
-> **Your ultimate AI gaming buddy. No lag. No cloud. All vibes.**
+![Gamer-Cat Avatar](docs/assets/face_torso_anime_girl.png)
 
-Gamer-Cat is a local-first, offline AI companion that actually **sees** what you're doing. Whether you're clutching a 1v5 in Valorant or peacefully farming in Stardew Valley, Gamer-Cat is there to hype you up, give (sometimes questionable) advice, and keep you company.
+> Your local anime gaming companion that sees your screen, talks back, and hypes you up in real time.
+
+## Why This Is Different
+Gamer-Cat is built for people who want the fun of an AI teammate without cloud lag, creepy telemetry, or internet dependency.
+
+You play. She watches the match. She reacts instantly.
+
+## Core Vibe
+- Real-time gaming buddy energy
+- Anime personality with voice interaction
+- Offline-first and privacy-first
+- Designed to run beside your game, not replace it
+
+## What Gamer-Cat Can Do
+- Watch your screen and describe what is happening
+- Talk to you with a live conversational loop
+- Keep context from recent screen events
+- Give playful, contextual commentary while you play
+
+## Quick Start
+1. Install Ollama and pull models:
+```bash
+ollama pull moondream
+ollama pull llama3
+```
+2. Sync project dependencies:
+```bash
+uv sync
+```
+3. Start Ollama:
+```bash
+ollama serve
+```
+4. Run Gamer-Cat:
+```bash
+uv run python src/gamer_cat.py
+```
+
+## Voice Preset (Anime Style)
+Use this in PowerShell before launching:
+
+```powershell
+$env:GAMERCAT_TTS_BACKEND="edge"
+$env:GAMERCAT_TTS_VOICE="ja-JP-NanamiNeural"
+$env:GAMERCAT_TTS_RATE="+20%"
+$env:GAMERCAT_TTS_PITCH="+8Hz"
+uv run python src/gamer_cat.py
+```
+
+## Screens + Website
+- Live project page: https://adityachauhan0.github.io/gamer-cat/
+- Website assets and styling live under `docs/`
+
+## Technical Docs
+All engineering details moved here:
+
+- [DOCUMENTATION.md](DOCUMENTATION.md)
+
+## Source
+- GitHub: https://github.com/adityachauhan0/gamer-cat
 
 ---
 
-## 🚀 LEVEL UP YOUR SETUP
-
-*   **👁️ Visual Context:** Snaps your screen every 10s. It knows when you're in the lobby or in the heat of battle.
-*   **🗣️ Real-time Voice:** Natural, low-latency voice interaction. Talk to it like a real homie.
-*   **🔒 100% Offline:** Runs entirely on your rig. No telemetry, no data harvesting, no lag spikes from cloud APIs.
-*   **MCP Server:** Exposes screen context as a standard Model Context Protocol tool.
-
----
-
-## 🛠️ TECH STACK (The "Specs")
-
-| Component | Tech |
-| :--- | :--- |
-| **The Brain** | Llama-3 (Ollama) |
-| **The Eyes** | Moondream (Ollama) |
-| **The Ears** | Faster-Whisper |
-| **The Voice** | pyttsx3 (SAPI5) |
-
----
-
-## ⚙️ PREREQUISITES
-
-1. **Ollama:** [Install Ollama](https://ollama.com/) and pull the models:
-   ```bash
-   ollama pull moondream
-   ollama pull llama3
-   ```
-2. **uv + Python 3.13.5** (pinned via `.python-version`).
-3. **FFmpeg:** Required for audio processing.
-4. **Dependencies:**
-   ```bash
-   uv sync
-   ```
-   *Note: `uv.lock` pins all dependency versions for reproducible installs.*
-
----
-
-## 👾 HOW TO RUN
-
-1.  **Start Ollama:** `ollama serve` (if not already running).
-2.  **Launch Gamer-Cat:**
-    ```bash
-    uv run python src/gamer_cat.py
-    ```
-
----
-
-## 📂 FILE STRUCTURE
-
-- `src/screen_capture.py`: Screen capture logic (Pillow).
-- `src/vision_engine.py`: Image-to-text via Ollama.
-- `src/voice_engine.py`: Whisper STT & pyttsx3 TTS.
-- `src/mcp_server.py`: MCP Server implementation.
-- `src/gamer_cat.py`: Main orchestration loop.
-
----
-
-**Built with ❤️ for gamers who play too much.**
+Built for solo queue grinders, chill farmers, and anime-core gamers.
