@@ -15,16 +15,24 @@ current_context = {
 
 def auto_capture_loop():
     """Background thread to capture screen every 10 seconds."""
+    last_error = None
+    last_desc = None
     while True:
         try:
             b64 = capture_screen()
-            desc = describe_image(b64)
+            desc = (describe_image(b64) or "").strip() or "Screen context unavailable."
             with context_lock:
                 current_context["description"] = desc
                 current_context["timestamp"] = time.time()
-            print(f"[AutoCapture] Screen context updated: {desc}")
+            if desc != last_desc:
+                print(f"[AutoCapture] Screen context updated: {desc}")
+                last_desc = desc
+            last_error = None
         except Exception as e:
-            print(f"[AutoCapture] Error: {e}")
+            error_text = str(e)
+            if error_text != last_error:
+                print(f"[AutoCapture] Error: {error_text}")
+                last_error = error_text
         time.sleep(10)
 
 @mcp.tool()

@@ -8,7 +8,7 @@ Gamer-Cat is a local-first, real-time game companion that combines:
 - local LLM response generation
 - text-to-speech playback
 
-Primary runtime target is Windows.
+Primary runtime target is Arch Linux (Wayland-first, X11 fallback), with Windows compatibility retained.
 
 ## 2. High-Level Architecture
 ```mermaid
@@ -45,7 +45,7 @@ sequenceDiagram
     loop Main loop (~10Hz)
       Voice->>Main: poll_transcript()
       alt transcript exists
-        Main->>Ollama: POST /api/chat (llama3, non-stream)
+        Main->>Ollama: POST /api/chat (llama3.2:3b, non-stream)
         Ollama-->>Main: response text
         Main->>Voice: speak(response)
       else context changed + cooldown + random trigger
@@ -98,7 +98,7 @@ sequenceDiagram
 ## 7. External Interfaces
 ### Ollama Chat API
 - Endpoint: `http://localhost:11434/api/chat`
-- Model: `llama3`
+- Model: `llama3.2:3b` (override with `GAMERCAT_LLM_MODEL`)
 - Streaming: disabled (`stream: false`)
 
 ### Ollama Vision API
@@ -123,38 +123,62 @@ Configured via `GAMERCAT_TTS_BACKEND`:
 - `piper`: offline neural (requires explicit model path)
 - `edge`: edge-tts neural voice
 - `powershell`: Windows `System.Speech`
-- `pyttsx3`: local SAPI5
+- `pyttsx3`: local platform TTS fallback
 - `auto`: selection chain below
 
 Auto selection order:
-1. `piper` (only if model is configured)
-2. `edge-tts` (one-time warning + disable on failure)
-3. PowerShell `System.Speech` (Windows)
+1. `piper` (preferred for local/offline voice; requires `GAMERCAT_TTS_PIPER_MODEL`)
+2. `edge-tts` (only when `GAMERCAT_LOCAL_ONLY=0`)
+3. PowerShell `System.Speech` (Windows only)
 4. `pyttsx3`
+
+### Screen capture backends
+Configured via `GAMERCAT_CAPTURE_BACKEND`:
+- `wayland`: uses external capture tools (`grim` or `gnome-screenshot`)
+- `x11`: uses `maim`, `import`, or `scrot`
+- `pil`: Pillow `ImageGrab` fallback
+- `auto`: chooses by session type (`wayland -> x11 -> pil`, `x11 -> pil -> wayland`)
 
 ## 9. Configuration Reference
 | Variable | Purpose | Default |
 |---|---|---|
-| `GAMERCAT_TTS_BACKEND` | Force TTS backend (`auto`, `edge`, `piper`, `powershell`, `pyttsx3`) | `auto` |
-| `GAMERCAT_TTS_VOICE` | edge-tts voice id | `ja-JP-NanamiNeural` |
-| `GAMERCAT_TTS_RATE` | edge-tts speaking rate | `+18%` |
-| `GAMERCAT_TTS_PITCH` | edge-tts pitch | `+7Hz` |
+| `GAMERCAT_TTS_BACKEND` | Force TTS backend (`auto`, `edge`, `piper`, `powershell`, `pyttsx3`) | `edge` |
+| `GAMERCAT_LOCAL_ONLY` | Disable cloud-backed TTS backends (`1` = local-only) | `0` |
+| `GAMERCAT_TTS_VOICE` | edge-tts voice id | `en-US-AnaNeural` |
+| `GAMERCAT_TTS_RATE` | edge-tts speaking rate | `+10%` |
+| `GAMERCAT_TTS_PITCH` | edge-tts pitch | `+12Hz` |
+| `GAMERCAT_STT_MODEL` | faster-whisper model name | `tiny.en` |
+| `GAMERCAT_STT_LANGUAGE` | STT language code | `en` |
+| `GAMERCAT_STT_ENFORCE_LANGUAGE` | drop transcripts not matching `GAMERCAT_STT_LANGUAGE` (`1`/`0`) | `1` |
+| `GAMERCAT_STT_LANGUAGE_THRESHOLD` | minimum language confidence for transcript acceptance | `0.4` |
+| `GAMERCAT_LISTEN_DURATION` | Duration of each listening window in seconds | `15` |
+| `GAMERCAT_LISTEN_RESUME_DELAY` | Delay after assistant speech before recording resumes (seconds) | `15` |
+| `GAMERCAT_PROACTIVE_ENABLED` | Enable unsolicited proactive comments (`1`/`0`) | `0` |
 | `GAMERCAT_TTS_PIPER_EXE` | Piper executable path | `piper` |
 | `GAMERCAT_TTS_PIPER_MODEL` | Piper model `.onnx` path | empty |
 | `GAMERCAT_TTS_PIPER_CONFIG` | Piper `.json` config path | empty |
 | `GAMERCAT_TTS_PIPER_LENGTH_SCALE` | Piper speed/length control | `0.95` |
+| `GAMERCAT_LLM_MODEL` | Ollama chat model name | `llama3.2:3b` |
+| `GAMERCAT_VISION_MODEL` | Ollama vision model name | `moondream` |
+| `GAMERCAT_CAPTURE_BACKEND` | Capture backend (`auto`, `wayland`, `x11`, `pil`) | `auto` |
+| `GAMERCAT_ALLOW_X11_ON_WAYLAND` | Try X11 fallback after Wayland failure (`1` to enable) | unset |
 
 ## 10. Build, Setup, and Run
 ### Prerequisites
-- Windows
+- Arch Linux
 - Ollama installed
-- FFmpeg/`ffplay` available on PATH
+- `ffmpeg`/`ffplay` available on PATH
+- `portaudio` + running PipeWire stack (`pipewire`, `wireplumber`)
+- Screen capture tooling (`grim` recommended for Wayland)
+- `espeak-ng` for local `pyttsx3` fallback
+- Wayland portal services (`xdg-desktop-portal` + desktop portal backend, for example `xdg-desktop-portal-kde`)
+  - KDE/Plasma systemd unit: `plasma-xdg-desktop-portal-kde.service`
 - `uv` installed
 
 ### Model setup
 ```bash
 ollama pull moondream
-ollama pull llama3
+ollama pull llama3.2:3b
 ```
 
 ### Python env setup
@@ -168,12 +192,27 @@ ollama serve
 uv run python src/gamer_cat.py
 ```
 
-### Recommended anime voice preset (PowerShell)
-```powershell
-$env:GAMERCAT_TTS_BACKEND="edge"
-$env:GAMERCAT_TTS_VOICE="ja-JP-NanamiNeural"
-$env:GAMERCAT_TTS_RATE="+20%"
-$env:GAMERCAT_TTS_PITCH="+8Hz"
+### Fresh reboot run
+```bash
+./startup.sh
+```
+Run it as your normal desktop user (no `sudo`).
+
+Startup bootstrap behavior:
+- sets defaults for unset `GAMERCAT_*` runtime variables
+- attempts to start `ollama serve` if Ollama is not reachable
+- attempts to pull missing required models (`GAMERCAT_LLM_MODEL`, `GAMERCAT_VISION_MODEL`)
+
+### Recommended anime voice preset (shell)
+```bash
+export GAMERCAT_LOCAL_ONLY="0"
+export GAMERCAT_TTS_BACKEND="edge"
+export GAMERCAT_TTS_VOICE="en-US-AnaNeural"
+export GAMERCAT_TTS_RATE="+10%"
+export GAMERCAT_TTS_PITCH="+12Hz"
+export GAMERCAT_LISTEN_DURATION="15"
+export GAMERCAT_LISTEN_RESUME_DELAY="15"
+export GAMERCAT_PROACTIVE_ENABLED="0"
 uv run python src/gamer_cat.py
 ```
 
@@ -199,9 +238,9 @@ Important log prefixes:
 | Symptom | Likely Cause | Mitigation |
 |---|---|---|
 | No AI replies | Ollama unavailable | verify `ollama serve`, model pulls, localhost access |
-| Silent speech | TTS backend failure/device routing | force backend to `edge` or `powershell`; verify `ffplay` |
+| Silent speech | TTS backend failure/device routing | force backend to `piper` or `edge`; verify `ffplay`/`aplay` |
 | Repeated STT mis-detection | ambient noise/language detection variance | improve mic quality, adjust capture duration, tune threshold |
-| Empty screen context | capture/vision request failure | inspect `[AutoCapture]` logs and Ollama vision endpoint |
+| Empty screen context | capture/vision request failure | inspect `[AutoCapture]` logs, set `GAMERCAT_CAPTURE_BACKEND`, verify `grim`/`maim` |
 | High CPU usage | continuous STT + model inference | increase listen interval, lower proactive frequency, use smaller models |
 
 ## 14. Security and Privacy Posture
